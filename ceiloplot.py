@@ -3,6 +3,7 @@
 from ceilometerclient import client as ceiloclient
 import argparse
 import sys
+import logging
 import os
 
 
@@ -47,18 +48,25 @@ class Ceiloplot():
                             help='Defaults to env[OS_AUTH_URL].')
         parser.add_argument('--meter', '-m',
                             required=True,
-                            help='The meter to use')
+                            help='The meter to use.')
 
         parser.add_argument('--limit', '-l',
                             help='The maximum number of samples.')
 
+        parser.add_argument('--gnuplot-terminal', '-t',
+                            help='terminal options passed to gnuplot.')
+
+        parser.add_argument('--gnuplot-output', '-g',
+                            help='output options passed to gnuplot.')
+
         parser.add_argument('-o', '--output',
-                            default='ceiloplot.gp',
-                            help='Filename of the gnuplot file')
+                            help='''Redirect the gnuplot script to the
+specified file.''')
 
         self.args = parser.parse_args(argv)
 
     def main(self, argv):
+        logging.basicConfig(level=logging.INFO)
         self.parse_args(argv)
         client = self.get_ceilometer_client()
         unit = None
@@ -68,7 +76,7 @@ class Ceiloplot():
         )
 
         if len(samples) == 0:
-            print "warning: empty dataset"
+            logging.warn("empty dataset")
 
         units = set([])
         resources = set([])
@@ -77,12 +85,19 @@ class Ceiloplot():
             units.add(sample.counter_unit)
             resources.add(sample.resource_id)
 
-        print "info: this dataset contains %d resources" % len(resources)
+        logging.info(
+            "info: this dataset contains %d resources" % len(resources)
+        )
 
         if len(units) > 1:
             raise Exception("You cannot mix different units.")
 
-        with file(self.args.output, "w") as w:
+        if self.args.output:
+            output = file(self.args.output, "w")
+        else:
+            output = sys.stdout
+
+        with output as w:
             if len(units) == 1:
                 w.write('set ylabel "%s"\n' % units.pop())
             plots = []
@@ -94,6 +109,13 @@ class Ceiloplot():
             w.write('set xtics rotate by -90\n')
             w.write('set xdata time\n')
             w.write('set timefmt \'%Y-%m-%dT%H:%M:%S\'\n')
+
+            if self.args.gnuplot_terminal:
+                w.write("set terminal %s\n" % self.args.gnuplot_terminal)
+
+            if self.args.gnuplot_output:
+                w.write("set output \"%s\"\n" % self.args.gnuplot_output)
+
             w.write('plot %s\n' % ",".join(plots))
 
             for resource in resources:
@@ -105,10 +127,10 @@ class Ceiloplot():
                         )
                 w.write('EOF\n')
 
-            print "file with %d samples written to %s" % (
+            logging.info("file with %d samples written to %s" % (
                 len(samples),
                 self.args.output
-            )
+            ))
 
 if __name__ == "__main__":
     Ceiloplot().main(sys.argv[1:])
