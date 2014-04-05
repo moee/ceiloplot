@@ -1,8 +1,10 @@
-ceiloplot
-=========
+ceiloplot ALPHA
+===============
 
 Create a [gnuplot](http://www.gnuplot.info/) from a
 [OpenStack Ceilometer](https://wiki.openstack.org/wiki/Heat) metric.
+
+Please keep in mind that this script is in an early alpha stage, so use this tool with care.
 
 ## Example 
 
@@ -17,7 +19,9 @@ Ceiloplot created an output file `ceiloplot.gp` which we now can run with gnuplo
 
 And voilà: Here we have a nice plot of our data
 
-[Imgur](http://i.imgur.com/eqpdt3u.png)
+![Sample plot network.incoming.packets.rate](http://i.imgur.com/eqpdt3u.png)
+
+Ceiloplot will create a line for each resource.
 
 ## Usage
 
