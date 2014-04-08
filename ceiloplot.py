@@ -22,7 +22,7 @@ class Ceiloplot():
 
     def parse_args(self, argv):
         parser = argparse.ArgumentParser(
-            prog='ceiloplot',
+            prog='python %s' % sys.argv[0],
             description=__doc__.strip(),
             add_help=True
         )

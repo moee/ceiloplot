@@ -21,12 +21,14 @@ Ceiloplot will create a line for each resource.
 
 ## Usage
 
-    usage: ceiloplot [-h] [--os-username OS_USERNAME] [--os-password OS_PASSWORD]
-                     [--os-tenant-id OS_TENANT_ID]
-                     [--os-tenant-name OS_TENANT_NAME] [--os-auth-url OS_AUTH_URL]
-                     --meter METER [--limit LIMIT]
-                     [--gnuplot-terminal GNUPLOT_TERMINAL]
-                     [--gnuplot-output GNUPLOT_OUTPUT] [-o OUTPUT]
+    usage: python ceiloplot.py [-h] [--os-username OS_USERNAME]
+                               [--os-password OS_PASSWORD]
+                               [--os-tenant-id OS_TENANT_ID]
+                               [--os-tenant-name OS_TENANT_NAME]
+                               [--os-auth-url OS_AUTH_URL] --meter METER
+                               [--limit LIMIT]
+                               [--gnuplot-terminal GNUPLOT_TERMINAL]
+                               [--gnuplot-output GNUPLOT_OUTPUT] [-o OUTPUT]
 
     Creates a gnuplot from ceilometer
 
