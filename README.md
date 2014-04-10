@@ -11,7 +11,7 @@ Please keep in mind that this script is in an early alpha stage, so use this too
 Assuming that the openstack credentials have been set as environment
 variables (see 'Usage' for further details).
 
-`$ python ceiloplot.py -m network.incoming.packets.rate --gnuplot-terminal "pngcairo" --gnuplot-output "packet_rate.png" | gnuplot`
+`$ python ceiloplot.py -m network.incoming.packets.rate | gnuplot`
 
 And voilà: Here we have a nice plot of our data.
 
